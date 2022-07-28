@@ -1,6 +1,4 @@
-import {
-  useState
-} from "react";
+import { useState } from "react";
 
 const buttonStyling = {
   backgroundColor: 'BlueViolet',
@@ -10,13 +8,13 @@ const buttonStyling = {
   padding: '20px'
 };
 
-export type IProps = {
+export interface IProps {
   getStep?: () => any;
   notifyKaoto?: (title: string, body?: string, variant?: any) => void;
   onButtonClicked?: () => void;
 }
 
-const Example = (props: IProps) => {
+export const Example = (props: IProps) => {
   const [localStep, setLocalStep] = useState({ name: 'Example' });
 
   const someAction = () => {
@@ -48,6 +46,4 @@ const Example = (props: IProps) => {
     </>
   )
 };
-
-export default Example;
 

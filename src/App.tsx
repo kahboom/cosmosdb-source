@@ -1,9 +1,8 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Example
-  from './Example';
+import {Example} from './Example';
 
-function App() {
+export const App = () => {
   return (
     <div
       className='App'>
