@@ -8,9 +8,7 @@ function App() {
     <div
       className='App'>
       <p>
-        Step
-        Extension
-        Template
+        CosmosDB Source
       </p>
       <Example />
     </div>

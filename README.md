@@ -1,7 +1,5 @@
-[![Netlify Status](https://api.netlify.com/api/v1/badges/75813c7b-6a87-4df4-8fd9-4772502b8b19/deploy-status)](https://app.netlify.com/sites/step-extension-template/deploys)
-
-# Step Extension Template
-Use this to build a Step Extension.
+# Step Extension: CosmosDB Source
+A step extension for CosmosDB source.
 
 ## Available Scripts
 

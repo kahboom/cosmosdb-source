@@ -1,5 +1,5 @@
 {
-  "name": "cherry",
+  "name": "cosmos-db-source",
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
