@@ -16,6 +16,9 @@ module.exports = {
     },
     port: 3004,
   },
+  optimization: {
+    splitChunks: false,
+  },
   output: {
     publicPath: "auto",
   },
