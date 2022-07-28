@@ -58,8 +58,8 @@ module.exports = {
         "./Example": "./src/Example",
       },
       shared:{
-        "react": { singleton: true, strictVersion: true, requiredVersion: '17.0.2' },
-        "react-dom": { singleton: true, strictVersion: true, requiredVersion: '17.0.2' }
+        "react": { singleton: true, strictVersion: true, requiredVersion: '18.0.0' },
+        "react-dom": { singleton: true, strictVersion: true, requiredVersion: '18.2.0' }
       },
     }),
     new HtmlWebpackPlugin({
