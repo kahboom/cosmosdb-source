@@ -1,16 +1,19 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const WebpackRemoteTypesPlugin = require('webpack-remote-types-plugin').default;
 const ModuleFederationPlugin = require("webpack").container.ModuleFederationPlugin;
 const path = require("path");
+
+const deps = require('./package.json').dependencies;
 
 module.exports = {
   entry: "./src/index",
   mode: "development",
   devServer: {
-    // headers: {
-    //   'Access-Control-Allow-Origin': '*',
-    //   'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-    //   'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
-    // },
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+      'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
+    },
     static: {
       directory: path.join(__dirname, "dist"),
     },
@@ -60,10 +63,21 @@ module.exports = {
         "./App": "./src/App",
         "./Example": "./src/Example",
       },
-      shared:{
+      remotes: {
+        kaoto: "kaoto@http://localhost:1337/remoteEntry.js",
+      },
+      shared: {
+        ...deps,
         "react": { singleton: true, strictVersion: true, requiredVersion: '18.0.0' },
         "react-dom": { singleton: true, strictVersion: true, requiredVersion: '18.2.0' }
       },
+    }),
+    new WebpackRemoteTypesPlugin({
+      remotes: {
+        kaoto: 'kaoto@http://localhost:1337/',
+      },
+      outputDir: './src/types',
+      remoteFileName: '[name]-dts.tgz'
     }),
     new HtmlWebpackPlugin({
       template: "./public/index.html",
