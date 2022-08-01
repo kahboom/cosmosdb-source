@@ -4,4 +4,4 @@ interface IDeploymentStore {
     setDeploymentCrd: (val?: string) => void;
 }
 export declare const useDeploymentStore: import("zustand").UseBoundStore<import("zustand").StoreApi<IDeploymentStore>>;
-export {};
+export default useDeploymentStore;

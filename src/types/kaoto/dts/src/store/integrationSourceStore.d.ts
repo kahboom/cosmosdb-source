@@ -3,4 +3,4 @@ interface ISourceCodeStore {
     setSourceCode: (val?: string) => void;
 }
 export declare const useIntegrationSourceStore: import("zustand").UseBoundStore<import("zustand").StoreApi<ISourceCodeStore>>;
-export {};
+export default useIntegrationSourceStore;

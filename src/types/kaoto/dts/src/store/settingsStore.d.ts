@@ -5,4 +5,4 @@ interface ISettingsStore {
     setSettings: (vals: ISettings) => void;
 }
 export declare const useSettingsStore: import("zustand").UseBoundStore<import("zustand").StoreApi<ISettingsStore>>;
-export {};
+export default useSettingsStore;
