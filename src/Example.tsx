@@ -4,7 +4,7 @@ import { useState } from "react";
 import {
   getKaotoCatalogSteps
 } from "kaoto/dts/src/components";
-import getStep from 'kaoto/stepExtensionApi';
+import stepExtension from 'kaoto/stepExtensionApi';
 import useIntegrationJsonStore from "kaoto/integrationJson";
 import getKaotoIntegrationJson from "kaoto/stepExtensionApi";
 
@@ -22,18 +22,24 @@ export interface IProps {
   onButtonClicked?: () => void;
 }
 
-export const Example = (props: IProps) => {
-  const [localStep, setLocalStep] = useState({ name: 'Example' });
-  const useStore = useIntegrationJsonStore();
+export const Example = ({ notifyKaoto, step, text }) => {
+  const [localSteps, setLocalSteps] = useState([]);
+  const { integrationJson } = useIntegrationJsonStore();
+  console.log('text: ', text);
 
   const someAction = () => {
     console.log('BANANAS123!');
-    console.log('integration json steps: ', useStore.integrationJson.steps);
-    const someStep = getStep();
-    console.log('someStep: ', someStep);
+    console.log('integration json steps: ', integrationJson.steps);
+    console.log('step: ', step);
+    if(integrationJson.steps) {
+      setLocalSteps(integrationJson.steps);
+    }
 
-    const integration = getKaotoIntegrationJson();
-    console.log('integration: ', integration);
+    // const someStep = stepExtension.getStep();
+    // console.log('someStep: ', someStep);
+    //
+    // const integration = getKaotoIntegrationJson();
+    // console.log('integration: ', integration);
 
     // setLocalStep(useStore.integrationJson.steps[0].name);
     // notifyKaoto('Message from Remote Step Extension!', 'hi from step extension template!', 'success');
@@ -54,8 +60,10 @@ export const Example = (props: IProps) => {
         onClick={someAction}>Step
         Extension
       </button>
-      <p>Local Step: {localStep?.name}</p>
+      <p>Step Length: {localSteps?.length}</p>
     </>
   )
 };
+
+
 

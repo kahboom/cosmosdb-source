@@ -19,11 +19,9 @@ module.exports = {
     },
     port: 3004,
   },
-  optimization: {
-    splitChunks: false,
-  },
   output: {
-    publicPath: "auto",
+    // publicPath: "auto",
+    publicPath: "http://localhost:3004",
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js"],
@@ -57,10 +55,9 @@ module.exports = {
   },
   plugins: [
     new ModuleFederationPlugin({
-      name: "cosmosDbSourceRemote",
+      name: "cosmosDbSourceLocal",
       filename: "remoteEntry.js",
       exposes: {
-        "./App": "./src/App",
         "./Example": "./src/Example",
       },
       remotes: {
