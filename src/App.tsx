@@ -1,6 +1,6 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Example} from './Example';
+import {CosmosView} from './CosmosView';
 
 export const App = () => {
   return (
@@ -9,7 +9,7 @@ export const App = () => {
       <p>
         CosmosDB Source
       </p>
-      <Example />
+      <CosmosView />
     </div>
   );
 }

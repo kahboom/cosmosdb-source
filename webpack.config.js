@@ -20,9 +20,11 @@ module.exports = {
     port: 3004,
   },
   output: {
-    // publicPath: "auto",
-    publicPath: "http://localhost:3004",
+    publicPath: "auto",
   },
+  // optimization: {
+  //   splitChunks: false
+  // },
   resolve: {
     extensions: [".ts", ".tsx", ".js"],
   },
@@ -58,7 +60,7 @@ module.exports = {
       name: "cosmosDbSourceLocal",
       filename: "remoteEntry.js",
       exposes: {
-        "./Example": "./src/Example",
+        "./CosmosView": "./src/CosmosView",
       },
       remotes: {
         kaoto: "kaoto@http://localhost:1337/remoteEntry.js",
