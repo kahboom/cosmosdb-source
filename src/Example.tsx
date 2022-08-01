@@ -1,7 +1,12 @@
 import { useState } from "react";
 // import kaotoExtensionApi from 'kaoto/stepExtensionApi';
 // import notifyKaoto from 'kaoto/stepExtensionApi';
+import {
+  getKaotoCatalogSteps
+} from "kaoto/dts/src/components";
+import getStep from 'kaoto/stepExtensionApi';
 import useIntegrationJsonStore from "kaoto/integrationJson";
+import getKaotoIntegrationJson from "kaoto/stepExtensionApi";
 
 const buttonStyling = {
   backgroundColor: 'BlueViolet',
@@ -24,6 +29,12 @@ export const Example = (props: IProps) => {
   const someAction = () => {
     console.log('BANANAS123!');
     console.log('integration json steps: ', useStore.integrationJson.steps);
+    const someStep = getStep();
+    console.log('someStep: ', someStep);
+
+    const integration = getKaotoIntegrationJson();
+    console.log('integration: ', integration);
+
     // setLocalStep(useStore.integrationJson.steps[0].name);
     // notifyKaoto('Message from Remote Step Extension!', 'hi from step extension template!', 'success');
 
