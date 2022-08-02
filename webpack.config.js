@@ -57,7 +57,8 @@ module.exports = {
   },
   plugins: [
     new ModuleFederationPlugin({
-      name: "cosmosDbSourceLocal",
+      // name: "cosmosDbSourceLocal",
+      name: "cosmosDbSourceRemote",
       filename: "remoteEntry.js",
       exposes: {
         "./CosmosView": "./src/CosmosView",
