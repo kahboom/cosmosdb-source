@@ -5,6 +5,9 @@ const path = require("path");
 
 const deps = require('./package.json').dependencies;
 
+const { NODE_ENV } = process.env;
+const inDevelopment = NODE_ENV === "development";
+
 module.exports = {
   entry: "./src/index",
   mode: "development",
@@ -63,16 +66,16 @@ module.exports = {
       exposes: {
         "./CosmosView": "./src/CosmosView",
       },
-      remotes: {
-        kaoto: "kaoto@http://localhost:1337/remoteEntry.js",
-      },
+      // remotes: {
+      //   kaoto: "kaoto@http://localhost:1337/remoteEntry.js",
+      // },
       shared: {
         ...deps,
-        "react": { singleton: true, strictVersion: true, requiredVersion: '18.0.0' },
-        "react-dom": { singleton: true, strictVersion: true, requiredVersion: '18.2.0' }
+        "react": { singleton: true, strictVersion: true, requiredVersion: deps.react },
+        "react-dom": { singleton: true, strictVersion: true, requiredVersion: deps["react-dom"] }
       },
     }),
-    new WebpackRemoteTypesPlugin({
+    !inDevelopment && new WebpackRemoteTypesPlugin({
       remotes: {
         kaoto: 'kaoto@http://localhost:1337/',
       },

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import useIntegrationJsonStore from "kaoto/integrationJson";
 import { IStepProps } from "kaoto/dts/types";
 
 const buttonStyling = {
@@ -20,16 +19,14 @@ export interface ICosmosViewProps {
 
 export const CosmosView = ({ notifyKaoto, step, text }: ICosmosViewProps) => {
   const [localStep, setLocalStep] = useState({ name: 'Local' });
-  const [localSteps, setLocalSteps] = useState([]);
-  const { integrationJson } = useIntegrationJsonStore();
   console.log('text: ', text);
 
   const syncAction = () => {
     console.log('Synchronizing..');
-    console.log('integration json steps: ', integrationJson.steps);
     console.log('step: ', step);
-    if(integrationJson.steps.length > 0) {
-      setLocalSteps(integrationJson.steps);
+
+    if(notifyKaoto) {
+      notifyKaoto('Hello!', 'This message is from a remote step extension!')
     }
 
     if(step) {
@@ -45,7 +42,6 @@ export const CosmosView = ({ notifyKaoto, step, text }: ICosmosViewProps) => {
         onClick={syncAction}>Synchronize Step
       </button>
       <p>Current Step: {localStep?.name}</p>
-      <p>Step Length: {localSteps?.length}</p>
     </>
   )
 };
