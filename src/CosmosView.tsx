@@ -39,7 +39,7 @@ export const CosmosView = ({ notifyKaoto, step, text }: ICosmosViewProps) => {
 
   return (
     <>
-      <h1>Step Extension</h1>
+      <h2>Step Extension</h2>
       <button
         style={buttonStyling}
         onClick={syncAction}>Synchronize Step
