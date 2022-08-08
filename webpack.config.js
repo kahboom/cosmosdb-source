@@ -1,16 +1,13 @@
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const WebpackRemoteTypesPlugin = require('webpack-remote-types-plugin').default;
-const ModuleFederationPlugin = require("webpack").container.ModuleFederationPlugin;
-const path = require("path");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+// const WebpackRemoteTypesPlugin = require('webpack-remote-types-plugin').default;
+const ModuleFederationPlugin = require('webpack').container.ModuleFederationPlugin;
+const path = require('path');
 
 const deps = require('./package.json').dependencies;
 
-const { NODE_ENV } = process.env;
-const inDevelopment = NODE_ENV === "development";
-
 module.exports = {
-  entry: "./src/index",
-  mode: "development",
+  entry: './src/index',
+  mode: 'development',
   devServer: {
     headers: {
       'Access-Control-Allow-Origin': '*',
@@ -18,18 +15,18 @@ module.exports = {
       'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
     },
     static: {
-      directory: path.join(__dirname, "dist"),
+      directory: path.join(__dirname, 'dist'),
     },
     port: 3004,
   },
   output: {
-    publicPath: "auto",
+    publicPath: 'auto',
   },
   // optimization: {
   //   splitChunks: false
   // },
   resolve: {
-    extensions: [".ts", ".tsx", ".js"],
+    extensions: ['.ts', '.tsx', '.js'],
   },
   module: {
     rules: [
@@ -50,40 +47,48 @@ module.exports = {
       },
       {
         test: /\.tsx?$/,
-        loader: "babel-loader",
+        loader: 'babel-loader',
         exclude: /node_modules/,
         options: {
-          presets: [["@babel/preset-react", {"runtime": "automatic"}], "@babel/preset-typescript"],
+          presets: [['@babel/preset-react', { 'runtime': 'automatic' }], '@babel/preset-typescript'],
         },
       },
     ],
   },
   plugins: [
     new ModuleFederationPlugin({
-      // name: "cosmosDbSourceLocal",
-      name: "cosmosDbSourceRemote",
-      filename: "remoteEntry.js",
+      name: 'cosmosDbSourceLocal',
+      // name: 'cosmosDbSourceRemote',
+      filename: 'remoteEntry.js',
       exposes: {
-        "./CosmosView": "./src/CosmosView",
+        './CosmosView': './src/CosmosView',
       },
       // remotes: {
-      //   kaoto: "kaoto@http://localhost:1337/remoteEntry.js",
+      //   kaoto: 'kaoto@http://localhost:1337/remoteEntry.js',
       // },
       shared: {
         ...deps,
-        "react": { singleton: true, strictVersion: true, requiredVersion: deps.react },
-        "react-dom": { singleton: true, strictVersion: true, requiredVersion: deps["react-dom"] }
+        'react': {
+          singleton: true,
+          strictVersion: true,
+          requiredVersion: deps.react
+        },
+        'react-dom': {
+          singleton: true,
+          strictVersion: true,
+          requiredVersion: deps['react-dom']
+        }
       },
     }),
-    !inDevelopment && new WebpackRemoteTypesPlugin({
-      remotes: {
-        kaoto: 'kaoto@http://localhost:1337/',
-      },
-      outputDir: './src/types',
-      remoteFileName: '[name]-dts.tgz'
-    }),
+    // new WebpackRemoteTypesPlugin({
+    //   remotes: {
+    //     kaoto: 'kaoto@http://localhost:1337/',
+    //   },
+    //   outputDir: './src/types',
+    //   remoteFileName: '[name]-dts.tgz'
+    // }),
     new HtmlWebpackPlugin({
-      template: "./public/index.html",
+      template: './public/index.html',
     }),
   ],
   stats: 'errors-only',

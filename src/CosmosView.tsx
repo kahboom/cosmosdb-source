@@ -1,5 +1,10 @@
-import { useState } from "react";
-import { IStepProps } from "kaoto/dts/types";
+import {
+  ChangeEvent,
+  useState
+} from "react";
+import {
+  IStepProps
+} from "kaoto/dts/types";
 
 const buttonStyling = {
   backgroundColor: 'BlueViolet',
@@ -17,31 +22,52 @@ export interface ICosmosViewProps {
   text?: string;
 }
 
-export const CosmosView = ({ notifyKaoto, step, text }: ICosmosViewProps) => {
+export const CosmosView = ({
+                             notifyKaoto,
+                             step,
+                             text
+                           }: ICosmosViewProps) => {
   const [localStep, setLocalStep] = useState({ name: 'Local' });
+  const [description, setDescription] = useState('');
   console.log('text: ', text);
+
+  const handleTyping = (val: ChangeEvent<HTMLInputElement>) => {
+    setDescription(val.target.value);
+  };
 
   const syncAction = () => {
     console.log('Synchronizing..');
     console.log('step: ', step);
 
-    if(notifyKaoto) {
-      notifyKaoto('Hello!', 'This message is from a remote step extension!')
+    if (notifyKaoto) {
+      notifyKaoto('Hello!', 'This message is from a step extension!')
     }
 
-    if(step) {
+    if (step) {
       setLocalStep(step);
     }
   };
 
   return (
     <>
-      <h2>Step Extension</h2>
+      <h2>
+        Step Extension
+      </h2>
       <button
         style={buttonStyling}
-        onClick={syncAction}>Synchronize Step
+        onClick={syncAction}>
+        Synchronize Step
       </button>
-      <p>Current Step: {localStep?.name}</p>
+      <br/><br/>
+      <p>
+        <input
+          type={'text'}
+          onChange={handleTyping}
+          defaultValue={description}/>
+      </p>
+      <p>Current
+        Step: {localStep?.name}</p>
+      <p>Description: {description}</p>
     </>
   )
 };
