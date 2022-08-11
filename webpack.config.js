@@ -22,9 +22,9 @@ module.exports = {
   output: {
     publicPath: 'auto',
   },
-  // optimization: {
-  //   splitChunks: false
-  // },
+  optimization: {
+    splitChunks: false
+  },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
   },
@@ -63,9 +63,9 @@ module.exports = {
       exposes: {
         './CosmosView': './src/CosmosView',
       },
-      // remotes: {
-      //   kaoto: 'kaoto@http://localhost:1337/remoteEntry.js',
-      // },
+      remotes: {
+        kaoto: 'kaoto@http://localhost:1337/remoteEntry.js',
+      },
       shared: {
         ...deps,
         'react': {

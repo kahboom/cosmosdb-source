@@ -35,13 +35,15 @@ export const CosmosView = ({
     setDescription(val.target.value);
   };
 
-  const syncAction = () => {
-    console.log('Synchronizing..');
-    console.log('step: ', step);
-
+  const notifyAction = () => {
     if (notifyKaoto) {
       notifyKaoto('Hello!', 'This message is from a step extension!')
     }
+  };
+
+  const syncAction = () => {
+    console.log('Synchronizing..');
+    console.log('step: ', step);
 
     if (step) {
       setLocalStep(step);
@@ -57,13 +59,20 @@ export const CosmosView = ({
         style={buttonStyling}
         onClick={syncAction}>
         Synchronize Step
+      </button>&nbsp;&nbsp;
+      <button
+        style={buttonStyling}
+        onClick={notifyAction}>
+        Notify Kaoto
       </button>
       <br/><br/>
       <p>
         <input
-          type={'text'}
           onChange={handleTyping}
-          defaultValue={description}/>
+          name={'description'}
+          placeholder={'Is it updated?'}
+          // defaultValue={description}
+        />
       </p>
       <p>Current
         Step: {localStep?.name}</p>
