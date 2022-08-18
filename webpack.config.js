@@ -1,9 +1,16 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 // const WebpackRemoteTypesPlugin = require('webpack-remote-types-plugin').default;
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ModuleFederationPlugin = require('webpack').container.ModuleFederationPlugin;
 const path = require('path');
 
 const deps = require('./package.json').dependencies;
+
+const isPatternflyStyles = (stylesheet) =>
+  stylesheet.includes('@patternfly/react-styles/css/') ||
+  stylesheet.includes('@patternfly/react-core/') ||
+  stylesheet.includes('@patternfly/react-code-editor') ||
+  stylesheet.includes('monaco-editor-webpack-plugin');
 
 module.exports = {
   entry: './src/index',
@@ -19,23 +26,36 @@ module.exports = {
     },
     port: 3004,
   },
+  devtool: 'eval-source-map',
   output: {
     publicPath: 'auto',
   },
-  optimization: {
-    splitChunks: false
-  },
+  // optimization: {
+  //   splitChunks: false
+  // },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
   },
   module: {
     rules: [
+      // {
+      //   test: /\.css$/,
+      //   use: [
+      //     'style-loader',
+      //     'css-loader'
+      //   ]
+      // },
+      {
+        test: /\.css|s[ac]ss$/i,
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+        include: (stylesheet) => !isPatternflyStyles(stylesheet),
+        sideEffects: true,
+      },
       {
         test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader'
-        ]
+        include: isPatternflyStyles,
+        use: ['null-loader'],
+        sideEffects: true,
       },
       {
         test: /\.(ttf|eot|woff|woff2)$/,
@@ -56,6 +76,16 @@ module.exports = {
     ],
   },
   plugins: [
+    new MiniCssExtractPlugin({
+      insert: (linkTag) => {
+        const preloadLinkTag = document.createElement('link');
+        preloadLinkTag.rel = 'preload';
+        preloadLinkTag.as = 'style';
+        preloadLinkTag.href = linkTag.href;
+        document.head.appendChild(preloadLinkTag);
+        document.head.appendChild(linkTag);
+      },
+    }),
     new ModuleFederationPlugin({
       name: 'cosmosDbSourceLocal',
       // name: 'cosmosDbSourceRemote',
@@ -68,6 +98,14 @@ module.exports = {
       },
       shared: {
         ...deps,
+        // '@patternfly/patternfly': {
+        //   singleton: true,
+        //   strictVersion: false
+        // },
+        // '@patternfly/react-core': {
+        //   singleton: true,
+        //   strictVersion: false
+        // },
         'react': {
           singleton: true,
           strictVersion: true,

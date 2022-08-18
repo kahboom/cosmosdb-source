@@ -1,10 +1,23 @@
 import {
-  ChangeEvent,
+  FormEvent,
   useState
 } from "react";
 import {
   IStepProps
 } from "kaoto/dts/types";
+import {
+  Card,
+  CardBody,
+  Divider,
+  Form,
+  FormGroup,
+  FormSelect,
+  FormSelectOption,
+  Page,
+  PageSection,
+  TextArea,
+  TextInput
+} from "@patternfly/react-core";
 
 const buttonStyling = {
   backgroundColor: 'BlueViolet',
@@ -28,12 +41,9 @@ export const CosmosView = ({
                              text
                            }: ICosmosViewProps) => {
   const [localStep, setLocalStep] = useState({ name: 'Local' });
-  const [description, setDescription] = useState('');
   console.log('text: ', text);
-
-  const handleTyping = (val: ChangeEvent<HTMLInputElement>) => {
-    setDescription(val.target.value);
-  };
+  const [description, setDescription] = useState('');
+  const [option, setOption] = useState('choose a fruit');
 
   const notifyAction = () => {
     if (notifyKaoto) {
@@ -50,34 +60,93 @@ export const CosmosView = ({
     }
   };
 
+  const handleNameChange = (name: string) => {
+    setLocalStep({ ...localStep, name: name });
+  };
+
+  const handleDescriptionChange = (description: string) => {
+    setDescription(description);
+  };
+
+  const handleOptionChange = (value: string, _event: FormEvent<HTMLSelectElement>) => {
+    setOption(value);
+  };
+
+  const options = [
+    { value: 'select one', label: 'Select one', disabled: false },
+    { value: 'cherry', label: 'Cherry', disabled: false },
+    { value: 'blueberry', label: 'Blueberry', disabled: false },
+    { value: 'lemon', label: 'Lemon', disabled: false },
+    { value: 'peach', label: 'Peach', disabled: false },
+    { value: 'apple', label: 'Apple', disabled: false },
+    { value: 'other', label: 'Other', disabled: false }
+  ];
+
   return (
-    <>
-      <h2>
-        Step Extension
-      </h2>
-      <button
-        style={buttonStyling}
-        onClick={syncAction}>
-        Synchronize Step
-      </button>&nbsp;&nbsp;
-      <button
-        style={buttonStyling}
-        onClick={notifyAction}>
-        Notify Kaoto
-      </button>
-      <br/><br/>
-      <p>
-        <input
-          onChange={handleTyping}
-          name={'description'}
-          placeholder={'Is it updated?'}
-          // defaultValue={description}
-        />
-      </p>
-      <p>Current
-        Step: {localStep?.name}</p>
-      <p>Description: {description}</p>
-    </>
+    <Page>
+      <PageSection isWidthLimited isCenterAligned>
+        <Card>
+          <CardBody>
+            <button
+              style={buttonStyling}
+              onClick={syncAction}>
+              Get Step from Kaoto
+            </button>&nbsp;&nbsp;
+            <button
+              style={buttonStyling}
+              onClick={notifyAction}>
+              Notify Kaoto
+            </button>
+            <br/><br/>
+            <p>Current Step: {localStep?.name}</p>
+          </CardBody>
+        </Card>
+        <Divider/>
+        <Card>
+          <CardBody>
+            <Form isHorizontal>
+              <FormGroup
+                label="Step name"
+                isRequired
+                fieldId="horizontal-form-name"
+                helperText="This will be filled automatically if you synchronize steps"
+              >
+                <TextInput
+                  value={localStep.name}
+                  isRequired
+                  type="text"
+                  id="horizontal-form-name"
+                  aria-describedby="horizontal-form-name-helper"
+                  name="horizontal-form-name"
+                  onChange={handleNameChange}
+                />
+              </FormGroup>
+              <FormGroup label="Choose a fruit" fieldId="horizontal-form-fruit">
+                <FormSelect
+                  value={option}
+                  onChange={handleOptionChange}
+                  id="horizontal-form-fruit"
+                  name="horizontal-form-fruit"
+                  aria-label="Choose a fruit"
+                >
+                  {options.map((option, index) => (
+                    <FormSelectOption isDisabled={option.disabled} key={index} value={option.value} label={option.label} />
+                  ))}
+                </FormSelect>
+              </FormGroup>
+              <FormGroup label="Your description" fieldId="horizontal-form-desc">
+                <TextArea
+                  value={description}
+                  onChange={handleDescriptionChange}
+                  id="horizontal-form-desc"
+                  name="horizontal-form-desc"
+                />
+              </FormGroup>
+            </Form>
+          </CardBody>
+        </Card>
+      </PageSection>
+    </Page>
   )
 };
 
