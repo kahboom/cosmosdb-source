@@ -63,14 +63,14 @@ module.exports = {
       },
       {
         test: /\.(svg|jpg|jpeg|png|gif)$/i,
-        type: 'asset/inline'
+        type: 'asset/inline',
       },
       {
         test: /\.tsx?$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
         options: {
-          presets: [['@babel/preset-react', { 'runtime': 'automatic' }], '@babel/preset-typescript'],
+          presets: [['@babel/preset-react', { runtime: 'automatic' }], '@babel/preset-typescript'],
         },
       },
     ],
@@ -98,32 +98,34 @@ module.exports = {
       },
       shared: {
         ...deps,
-        // '@patternfly/patternfly': {
-        //   singleton: true,
-        //   strictVersion: false
-        // },
-        // '@patternfly/react-core': {
-        //   singleton: true,
-        //   strictVersion: false
-        // },
-        'react': {
+        '@patternfly/patternfly': {
           singleton: true,
           strictVersion: true,
-          requiredVersion: deps.react
+          requiredVersion: deps['@patternfly/patternfly'],
+        },
+        '@patternfly/react-core': {
+          singleton: true,
+          strictVersion: true,
+          requiredVersion: deps['@patternfly/react-core'],
+        },
+        react: {
+          singleton: true,
+          strictVersion: true,
+          requiredVersion: deps.react,
         },
         'react-dom': {
           singleton: true,
           strictVersion: true,
-          requiredVersion: deps['react-dom']
-        }
+          requiredVersion: deps['react-dom'],
+        },
       },
     }),
     // new WebpackRemoteTypesPlugin({
     //   remotes: {
     //     kaoto: 'kaoto@http://localhost:1337/',
     //   },
-    //   outputDir: './src/types',
-    //   remoteFileName: '[name]-dts.tgz'
+    //   outputDir: './src/@kaoto',
+    //   remoteFileName: '[name]-dts.tgz',
     // }),
     new HtmlWebpackPlugin({
       template: './public/index.html',

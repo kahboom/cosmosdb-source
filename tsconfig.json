@@ -4,7 +4,7 @@
     "strict": true,
     "jsx": "react-jsx",
     "paths": {
-      "kaoto/*": ["./src/types/kaoto/*"]
+      "@kaoto": ["./src/@kaoto"]
     }
   },
   "include": [

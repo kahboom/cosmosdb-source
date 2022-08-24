@@ -1,11 +1,9 @@
+import { FormEvent, useState } from 'react';
+import { IStepProps } from '@kaoto';
+
 import {
-  FormEvent,
-  useState
-} from "react";
-import {
-  IStepProps
-} from "kaoto/dts/types";
-import {
+  ActionGroup,
+  Button,
   Card,
   CardBody,
   Divider,
@@ -16,38 +14,36 @@ import {
   Page,
   PageSection,
   TextArea,
-  TextInput
-} from "@patternfly/react-core";
+  TextInput,
+} from '@patternfly/react-core';
+import { IStepExtensionApi } from '@kaoto';
 
 const buttonStyling = {
   backgroundColor: 'BlueViolet',
   color: 'white',
   borderRadius: '25px',
   border: 0,
-  padding: '20px'
+  padding: '20px',
 };
 
 export interface ICosmosViewProps {
-  getStep?: () => any;
-  notifyKaoto?: (title: string, body?: string, variant?: any) => void;
+  kaoto?: IStepExtensionApi;
   onButtonClicked?: () => void;
   step?: IStepProps;
   text?: string;
 }
 
-export const CosmosView = ({
-                             notifyKaoto,
-                             step,
-                             text
-                           }: ICosmosViewProps) => {
-  const [localStep, setLocalStep] = useState({ name: 'Local' });
+export const CosmosView = ({ kaoto, step, text }: ICosmosViewProps) => {
+  const [localStep, setLocalStep] = useState(step);
   console.log('text: ', text);
   const [description, setDescription] = useState('');
   const [option, setOption] = useState('choose a fruit');
 
+  console.log('step parameters: ', kaoto?.stepParams);
+
   const notifyAction = () => {
-    if (notifyKaoto) {
-      notifyKaoto('Hello!', 'This message is from a step extension!')
+    if (kaoto?.notifyKaoto) {
+      kaoto.notifyKaoto('Hello!', 'This message is from a step extension!');
     }
   };
 
@@ -61,7 +57,11 @@ export const CosmosView = ({
   };
 
   const handleNameChange = (name: string) => {
-    setLocalStep({ ...localStep, name: name });
+    // @ts-ignore
+    setLocalStep({
+      ...localStep,
+      name: name,
+    });
   };
 
   const handleDescriptionChange = (description: string) => {
@@ -72,14 +72,46 @@ export const CosmosView = ({
     setOption(value);
   };
 
+  const handleSubmit = () => {
+    console.log('submit data: ', localStep);
+  };
+
   const options = [
-    { value: 'select one', label: 'Select one', disabled: false },
-    { value: 'cherry', label: 'Cherry', disabled: false },
-    { value: 'blueberry', label: 'Blueberry', disabled: false },
-    { value: 'lemon', label: 'Lemon', disabled: false },
-    { value: 'peach', label: 'Peach', disabled: false },
-    { value: 'apple', label: 'Apple', disabled: false },
-    { value: 'other', label: 'Other', disabled: false }
+    {
+      value: 'select one',
+      label: 'Select one',
+      disabled: false,
+    },
+    {
+      value: 'cherry',
+      label: 'Cherry',
+      disabled: false,
+    },
+    {
+      value: 'blueberry',
+      label: 'Blueberry',
+      disabled: false,
+    },
+    {
+      value: 'lemon',
+      label: 'Lemon',
+      disabled: false,
+    },
+    {
+      value: 'peach',
+      label: 'Peach',
+      disabled: false,
+    },
+    {
+      value: 'apple',
+      label: 'Apple',
+      disabled: false,
+    },
+    {
+      value: 'other',
+      label: 'Other',
+      disabled: false,
+    },
   ];
 
   return (
@@ -87,21 +119,19 @@ export const CosmosView = ({
       <PageSection isWidthLimited isCenterAligned>
         <Card>
           <CardBody>
-            <button
-              style={buttonStyling}
-              onClick={syncAction}>
-              Get Step from Kaoto
-            </button>&nbsp;&nbsp;
-            <button
-              style={buttonStyling}
-              onClick={notifyAction}>
+            <button style={buttonStyling} onClick={syncAction}>
+              Sync with Kaoto Step
+            </button>
+            &nbsp;&nbsp;
+            <button style={buttonStyling} onClick={notifyAction}>
               Notify Kaoto
             </button>
-            <br/><br/>
+            <br />
+            <br />
             <p>Current Step: {localStep?.name}</p>
           </CardBody>
         </Card>
-        <Divider/>
+        <Divider />
         <Card>
           <CardBody>
             <Form isHorizontal>
@@ -112,7 +142,7 @@ export const CosmosView = ({
                 helperText="This will be filled automatically if you synchronize steps"
               >
                 <TextInput
-                  value={localStep.name}
+                  value={localStep?.name}
                   isRequired
                   type="text"
                   id="horizontal-form-name"
@@ -130,7 +160,12 @@ export const CosmosView = ({
                   aria-label="Choose a fruit"
                 >
                   {options.map((option, index) => (
-                    <FormSelectOption isDisabled={option.disabled} key={index} value={option.value} label={option.label} />
+                    <FormSelectOption
+                      isDisabled={option.disabled}
+                      key={index}
+                      value={option.value}
+                      label={option.label}
+                    />
                   ))}
                 </FormSelect>
               </FormGroup>
@@ -142,15 +177,20 @@ export const CosmosView = ({
                   name="horizontal-form-desc"
                 />
               </FormGroup>
+              <ActionGroup>
+                <Button variant="primary" onClick={handleSubmit}>
+                  Submit
+                </Button>
+                <Button variant="link" type={'reset'}>
+                  Cancel
+                </Button>
+              </ActionGroup>
             </Form>
           </CardBody>
         </Card>
       </PageSection>
     </Page>
-  )
+  );
 };
 
 export default CosmosView;
-
-
-
